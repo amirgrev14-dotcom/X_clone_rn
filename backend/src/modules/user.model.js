@@ -3,7 +3,7 @@ import mongoose from "mongoose"
 
 const userSchema = new mongoose.Schema(
   {
-    clerckId: {
+    clerkId: {
       type: String,
       required: true,
       unique: true
@@ -69,6 +69,5 @@ const userSchema = new mongoose.Schema(
 )
 
 const User = mongoose.model("User", userSchema)
-console.log("User model loaded", User);
 
 export default User
