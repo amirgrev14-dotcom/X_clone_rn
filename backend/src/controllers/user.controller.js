@@ -44,7 +44,7 @@ export const syncUser = asyncHandler(async () => {
     email: clerkUser.emailAddresses[0].emailAddress,
     firstName: clerkUser.firstName || "",
     lastName: clerkUser.lastName || "",
-    userName: clerkUser.emailAddresses[0].emailAddress.split("@")[0], // john@gmail.com => john  
+    username: clerkUser.emailAddresses[0].emailAddress.split("@")[0], // john@gmail.com => john  
     profilePicture: clerkUser.imageUrl || "",
   }
 
@@ -69,10 +69,6 @@ export const followUser = asyncHandler(async (req, res) => {
   const { userId } = getAuth(req);
   const { targetUserId } = req.params;
 
-  if(userId === targetUserId) {
-    return res.status(400).json({ error: "You cannot follow yourself" })
-  }
-
   const currentUser = await User.findOne({ clerkId: userId})
   const targetUser = await User.findById(targetUserId);
 
@@ -80,7 +76,12 @@ export const followUser = asyncHandler(async (req, res) => {
     return res.status(404).json({ error: "User not found" })
   }
 
-    const isFollowing = currentUser.following.includes(targetUserId)
+  if(currentUser._id.equals(targetUser._id)) {
+    return res.status(400).json({ error: "You cannot follow yourself" })
+  }
+
+
+    const isFollowing = currentUser.following.some(user => user.equals(targetUser._id))
   
     if(isFollowing) {
       // unfollow
