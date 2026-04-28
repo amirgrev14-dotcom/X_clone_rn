@@ -6,7 +6,7 @@ import { clerkClient, getAuth } from "@clerk/express";
 export const getUserProfile = asyncHandler(async (req, res) => {
   const { username } = req.params;
 
-  const user = await User.findOne({ username })
+  const user = await User.findOne({ username }).select("-email -clerkId -__v")
   if(!user) {
     return res.status(404).json({ message: "User not found" })
   }
@@ -26,7 +26,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
   res.status(200).json({ user })
 })
 
-export const syncUser = asyncHandler(async () => {
+export const syncUser = asyncHandler(async (req, res) => {
   const { userId } = getAuth(req)
 
   // check if user already exists in mongodb
@@ -85,11 +85,11 @@ export const followUser = asyncHandler(async (req, res) => {
   
     if(isFollowing) {
       // unfollow
-      await User.findByIdAndUpdate(currentUser._id, {$pull: {following: targetUserId}}),
+      await User.findByIdAndUpdate(currentUser._id, {$pull: {following: targetUserId}});
       await User.findByIdAndUpdate(targetUserId, {$pull: {followers: currentUser._id}})
     } else {
       // follow
-      await User.findByIdAndUpdate(currentUser._id, {$push: {following: targetUserId}}),
+      await User.findByIdAndUpdate(currentUser._id, {$push: {following: targetUserId}});
       await User.findByIdAndUpdate(targetUserId, {$push: {followers: currentUser._id}})
       
       // create notification
