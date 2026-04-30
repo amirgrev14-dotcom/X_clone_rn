@@ -22,6 +22,11 @@ app.use("/api/posts", postRoutes)
 app.use("/api/comments", commentRoutes)
 app.use("/api/notifications", notificationRoutes)
 
+app.use((err, req, res) => {
+  console.error("Unhandled error:", err);
+  res.status(500).json({ error: err.message || "Internal servr error" })
+})
+
 const startServer = async () => {
   await connectDB();
 
