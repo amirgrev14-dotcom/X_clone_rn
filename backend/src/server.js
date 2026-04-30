@@ -16,6 +16,11 @@ app.use(cors())
 app.use(express.json())
 app.use(clerkMiddleware())
 
+// health check
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok" })
+})
+
 // routes
 app.use("/api/users", userRoutes)
 app.use("/api/posts", postRoutes)
