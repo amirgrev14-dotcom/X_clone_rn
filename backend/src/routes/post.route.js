@@ -1,6 +1,7 @@
 import express from "express";
 import { getPost, getPosts, getUserPosts, likePost, deletePost} from "../controllers/post.controller.js";
 import { upload } from "../middleware/upload.middleware.js";
+import { protectRoute } from "../middleware/auth.middleware.js";
 const router = express.Router();
 
 // public routes
