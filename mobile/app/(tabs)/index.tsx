@@ -1,20 +1,19 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useClerk } from '@clerk/expo'
+import SignOutBtn from '@/components/SignOutBtn'
 
-const Home = () => {
+const HomeScreen = () => {
   const { signOut } = useClerk()
 
   return (
     <View>
       <Text>home</Text>
       
-    <TouchableOpacity onPress={() => signOut()}>
-      <Text>Sign out</Text>
-    </TouchableOpacity> 
+    <SignOutBtn />
     </View>
 
   )
 }
 
-export default Home
+export default HomeScreen

@@ -22,12 +22,12 @@ const SignIn = () => {
 
           <View>
             <SignInBtn
-             text="Sign in with Google"
-             size={{ width: 25, height: 25}}
-             isLoading={isLoading}
-             onPress={() => handleSocialAuth("oauth_google")}
-             margin={{ marginBottom: 10, marginTop: 5}}
-             pathImage={require('../../assets/images/no_fone/google.png')}  />
+              text="Sign in with Google"
+              size={{ width: 25, height: 25}}
+              isLoading={isLoading}
+              onPress={() => handleSocialAuth("oauth_google")}
+              margin={{ marginBottom: 10, marginTop: 5}}
+              pathImage={require('../../assets/images/no_fone/google.png')}  />
 
             <SignInBtn
               text="Sign in with Apple"
