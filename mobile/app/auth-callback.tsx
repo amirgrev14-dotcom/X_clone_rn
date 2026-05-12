@@ -12,7 +12,7 @@ const AuthCallBack = () => {
     if(isSignedIn) {
       router.replace("/(tabs)")
     }
-  }, [isSignedIn])
+  }, [isSignedIn, router])
 
   return (
     <View className="flex-1 text-center justify-center">
