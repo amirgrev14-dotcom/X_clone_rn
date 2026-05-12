@@ -4,7 +4,7 @@ import SignInBtn from '@/components/SignInBtn';
 import React from 'react'
 
 const SignIn = () => {
-  const { isLoading, handleSocialAuth } = useSocialAuth()
+  const { isLoading, currentStrategy, handleSocialAuth } = useSocialAuth()
   return (
       <View className="flex-1 bg-white">
       <View className="flex-1 px-8 justify-between">
@@ -22,16 +22,16 @@ const SignIn = () => {
 
           <View>
             <SignInBtn
-             text="Sign in with Google"
-             size={{ width: 25, height: 25}}
-             isLoading={isLoading}
-             onPress={() => handleSocialAuth("oauth_google")}
-             margin={{ marginBottom: 10, marginTop: 5}}
-             pathImage={require('../../assets/images/no_fone/google.png')}  />
+              text="Sign in with Google"
+              size={{ width: 25, height: 25}}
+              isLoading={isLoading && currentStrategy === "oauth_google"}
+              onPress={() => handleSocialAuth("oauth_google")}
+              margin={{ marginBottom: 10, marginTop: 5}}
+              pathImage={require('../../assets/images/no_fone/google.png')}  />
 
             <SignInBtn
               text="Sign in with Apple"
-              isLoading={isLoading}
+              isLoading={isLoading && currentStrategy === "oauth_apple"}
               onPress={() => handleSocialAuth("oauth_apple")}
               size={{ width: 25, height: 25}}
               pathImage={require('../../assets/images/no_fone/apple.png')}  />

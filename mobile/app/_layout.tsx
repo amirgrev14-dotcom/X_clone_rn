@@ -1,11 +1,18 @@
 import "../global.css"
-import { Stack } from 'expo-router'
+import { Stack, useRouter, usePathname, Redirect } from 'expo-router'
+import * as Linking from 'expo-linking'
 import { ClerkProvider, useAuth } from '@clerk/expo'
 import { tokenCache } from '@clerk/expo/token-cache'
 import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useEffect } from "react";
 
 
 const RootLayout = () => {
+  // const router = useRouter()
+  // const pathname = usePathname() // get the current url of the user
+  // const CALLBACK_PATH = "myapp://xclone"
+
   
   const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
   
@@ -16,6 +23,7 @@ const RootLayout = () => {
 
     function RootStack() {
       const { isSignedIn } = useAuth()
+      
       return (
         <>
         <Stack screenOptions={{ headerShown: false }}>
@@ -25,7 +33,7 @@ const RootLayout = () => {
 
           {/* result of boolean || undefined || null === every boolean type (!!) */}
           <Stack.Protected guard={!!isSignedIn}>
-            <Stack.Screen name="(app)" />
+            <Stack.Screen name="(tabs)" />
           </Stack.Protected>
         </Stack>
         </>
@@ -34,7 +42,9 @@ const RootLayout = () => {
 
     return (
       <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-        <RootStack />
+        <SafeAreaView className="flex-1">
+          <RootStack />
+        </SafeAreaView>
         <StatusBar style="auto" />
       </ClerkProvider>
     )
