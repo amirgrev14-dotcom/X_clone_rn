@@ -3,19 +3,10 @@ import { useAuth } from '@clerk/expo'
 import { Stack } from 'expo-router'
 
 const AuthLayout = () => {
-  const { isLoaded, isSignedIn } = useAuth()
+  const { isLoaded } = useAuth()
 
   if(!isLoaded) {
     return null
-  }
-
-
-  if(isSignedIn) {
-    return (
-      <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)"/>
-      </Stack>
-    )
   }
 
   return (
