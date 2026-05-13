@@ -1,4 +1,4 @@
-import { apiShema } from "@/stories/api.server.ts";
+import { apiShema } from "@/stores/api.server.ts";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand"
 
