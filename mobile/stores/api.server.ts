@@ -1,4 +1,4 @@
-const SERVER_URL = process.env.SERVER_URL;
+const SERVER_URL = process.env.API_BASE_APP_URL;
 // const SERVER_URL = "http://localhost:5001";
 
 export async function fetchServer(path: string, options?: RequestInit) {
