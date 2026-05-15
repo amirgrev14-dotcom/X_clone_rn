@@ -1,6 +1,7 @@
 import { View, Text, TextInput, ScrollView, FlatList, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Feather } from '@expo/vector-icons'
+import SearchInput from '@/components/searchInput'
 
 const SearchScreen = () => {
 
@@ -50,13 +51,7 @@ const SearchScreen = () => {
     <View className='bg-white flex-1'>
 
       {/* Header */}
-        <View className='px-4 py-3 border-b border-gray-100'>
-          <View className='px-3 flex-row items-center bg-gray-100 rounded-full'>
-            <Feather name="search" size={20} color="#657786" />
-            <TextInput placeholder="Search Twitter" className="flex-1 ml-3 text-base" placeholderTextColor="#657786" />
-              
-          </View>
-        </View>
+      <SearchInput value="" textPlaceholder="Search Twitter" placeholderTextColor="#657786" iconName="search" iconColor="#657786" />
       {/* Search List */}
       <ScrollView className="flex-1">
         <View className='p-4'>

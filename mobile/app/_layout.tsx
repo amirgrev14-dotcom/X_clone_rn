@@ -6,7 +6,9 @@ import { tokenCache } from '@clerk/expo/token-cache'
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect } from "react";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
+const queryClient = new QueryClient()
 
 const RootLayout = () => {
   // const router = useRouter()
@@ -42,10 +44,12 @@ const RootLayout = () => {
 
     return (
       <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-        <SafeAreaView className="flex-1">
+        <QueryClientProvider client={queryClient}>
+        <SafeAreaView edges={["bottom"]} className="flex-1">
           <RootStack />
         </SafeAreaView>
         <StatusBar style="auto" />
+        </QueryClientProvider>
       </ClerkProvider>
     )
   }
