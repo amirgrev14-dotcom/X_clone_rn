@@ -8,7 +8,8 @@ import { useAuth } from '@clerk/expo'
 
 const TabsLayout = () => {
   const insets = useSafeAreaInsets();
-  const { isSignedIn } = useAuth();
+  
+
 
   return (
       <Tabs screenOptions={

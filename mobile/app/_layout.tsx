@@ -16,8 +16,8 @@ const RootLayout = () => {
   // const CALLBACK_PATH = "myapp://xclone"
 
   
-  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
-  
+    const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
+
     if (!publishableKey) {
       throw new Error('Add your Clerk Publishable Key to the .env file')
     }
@@ -25,6 +25,7 @@ const RootLayout = () => {
 
     function RootStack() {
       const { isSignedIn } = useAuth()
+      console.log("isSignedIn", isSignedIn)
       
       return (
         <>
