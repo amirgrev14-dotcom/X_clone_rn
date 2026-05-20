@@ -15,7 +15,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 })
 
 export const updateProfile = asyncHandler(async (req, res) => {
-  const userId = req.auth.userId;;
+  const { userId } = getAuth(req);
 
   const user = await User.findOneAndUpdate({ clerkId: userId }, req.body, { new: true })
 
@@ -27,7 +27,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
 })
 
 export const syncUser = asyncHandler(async (req, res) => {
-  const userId = req.auth.userId;
+  const { userId } = getAuth(req);
   console.log("Sync ID", userId)
 
   // check if user already exists in mongodb
@@ -55,7 +55,7 @@ export const syncUser = asyncHandler(async (req, res) => {
 })
 
 export const getCurrentUser = asyncHandler(async (req, res) => {
-  const userId = req.auth.userId;
+  const { userId } = getAuth(req)
 
   const user = await User.findOne({ clerkId: userId})
 
@@ -67,7 +67,7 @@ export const getCurrentUser = asyncHandler(async (req, res) => {
 })
 
 export const followUser = asyncHandler(async (req, res) => {
-  const userId = req.auth.userId;;
+  const { userId } = getAuth(req);
   const { targetUserId } = req.params;
 
   const currentUser = await User.findOne({ clerkId: userId})
