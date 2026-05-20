@@ -4,7 +4,7 @@ import Notification from "../models/notification.model.js";
 import User from "../models/user.model.js";
 
 export const getNotifications = asyncHandler(async (req, res) => {
-  const { userId } = getAuth(req);
+  const userId = req.auth.userId;;
 
   const user = await User.findOne({ clerkId: userId });
   if (!user) return res.status(404).json({ error: "User not found" });
@@ -19,7 +19,7 @@ export const getNotifications = asyncHandler(async (req, res) => {
 });
 
 export const deleteNotification = asyncHandler(async (req, res) => {
-  const { userId } = getAuth(req);
+  const userId = req.auth.userId;;
   const { notificationId } = req.params;
 
   const user = await User.findOne({ clerkId: userId });

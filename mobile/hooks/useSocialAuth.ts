@@ -15,7 +15,7 @@ import { Alert } from "react-native";
       try {
         const redirectUrl = AuthSession.makeRedirectUri({
           scheme: "myapp",
-          path: "/auth-callback"
+          path: "auth-callback"
         })
 
         const { createdSessionId, setActive } = await startSSOFlow({ strategy, redirectUrl })

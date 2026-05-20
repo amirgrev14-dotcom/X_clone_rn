@@ -62,7 +62,7 @@ export const getUserPosts = asyncHandler(async (req, res) => {
 })
 
 export const createPost = asyncHandler(async (req, res) => {
-  const { userId } = getAuth(req);
+  const userId = req.auth.userId;
   const { content } = req.body;
   const imageFile = req.file;
 
@@ -112,7 +112,7 @@ export const createPost = asyncHandler(async (req, res) => {
 })
 
 export const likePost = asyncHandler(async (req, res) => {
-  const { userId } = getAuth(req)
+  const userId = req.auth.userId;
   const { postId } = req.params;
 
   const user = await User.findOne({ clerkId: userId})
@@ -151,7 +151,7 @@ res.status(200).json({
 });
 
 export const deletePost = asyncHandler(async (req, res) => {
-  const { userId } = getAuth(req)
+  const userId = req.auth.userId;
   const { postId } = req.params;
 
   const user = await User.findOne({ clerkId: userId });

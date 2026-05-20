@@ -1,10 +1,27 @@
 import { View, Image, Text } from 'react-native'
 import { useSocialAuth } from '@/hooks/useSocialAuth';
+import { Platform } from 'react-native';
+import * as WebBrowser from 'expo-web-browser'
 import SignInBtn from '@/components/SignInBtn';
 import React from 'react'
 
+export const useWarmUpBrowser = () => {
+  React.useEffect(() => {
+    if (Platform.OS !== 'android') return
+    void WebBrowser.warmUpAsync()
+    return () => {
+      void WebBrowser.coolDownAsync()
+    }
+  }, [])
+}
+
+WebBrowser.maybeCompleteAuthSession()
+
 const SignIn = () => {
   const { isLoading, currentStrategy, handleSocialAuth } = useSocialAuth()
+
+
+
   return (
       <View className="flex-1 bg-white">
       <View className="flex-1 px-8 justify-between">

@@ -101,11 +101,11 @@ const MessagesScreen = () => {
         contentContainerStyle={{paddingBottom: 100+insets.bottom}}
       >
         {conversationsList.map((conversation) => (
-          <>
-          <View>
+        
+          <View key={conversation.id}>
             {ConvItem(conversation)}
           </View>
-          </>
+        
         ))}
       </ScrollView>
 

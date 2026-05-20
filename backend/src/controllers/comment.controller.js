@@ -16,7 +16,7 @@ export const getComments = asyncHandler(async (req, res) => {
 });
 
 export const createComment = asyncHandler(async (req, res) => {
-  const { userId } = getAuth(req);
+  const userId = req.auth.userId;;
   const { postId } = req.params;
   const { content } = req.body;
 
@@ -55,7 +55,7 @@ export const createComment = asyncHandler(async (req, res) => {
 });
 
 export const deleteComment = asyncHandler(async (req, res) => {
-  const { userId } = getAuth(req);
+  const userId = req.auth.userId;;
   const { commentId } = req.params;
 
   const user = await User.findOne({ clerkId: userId });
