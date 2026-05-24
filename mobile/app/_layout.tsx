@@ -46,7 +46,7 @@ const RootLayout = () => {
     return (
       <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
         <QueryClientProvider client={queryClient}>
-        <SafeAreaView edges={["bottom"]} className="flex-1">
+        <SafeAreaView edges={["top"]} className="flex-1">
           <RootStack />
         </SafeAreaView>
         <StatusBar style="auto" />
