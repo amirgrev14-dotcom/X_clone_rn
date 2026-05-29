@@ -7,23 +7,26 @@ import FeatherBtn from './FeatherBtn';
 
 interface PostCardProps {
   post: Post;
-  onLike: (postId: string) => void;
-  onDelete: (postId: string) => void;
-  isLiked: boolean;
+  onLike?: (postId: string) => void;
+  onDelete?: (postId: string) => void;
+  onComment?: (post: Post) => void;
+  isLiked?: boolean;
   currentUser: User;
+  formatPost?: "short" | "full";
 }
 
-const PostCard = ({ currentUser, onDelete, onLike, post, isLiked }: PostCardProps) => {
+const PostCard = ({ currentUser, onDelete, onLike, post, isLiked, onComment, formatPost="full" }: PostCardProps) => {
 
   const [isLikeActive, setIsLikeActive] = useState(false)
   const [likeCount, setLikeCount] = useState(post.likes?.length || 0)
+  const ifLiked = isLiked || isLikeActive
 
   const isOwnPost = post.user._id === currentUser._id
 
   const handleDelete = () => {
     Alert.alert("Delete Post", "Are you sure want to delete this post?",
       [
-        {text: "Delete", style: "destructive", onPress: () => onDelete(post._id)},
+        {text: "Delete", style: "destructive", onPress: () => onDelete && onDelete(post._id)},
         {text: "Cancel", style: "cancel"}
       ]
     )
@@ -33,7 +36,7 @@ const PostCard = ({ currentUser, onDelete, onLike, post, isLiked }: PostCardProp
   const handleLike = (postId: string) => {
     setIsLikeActive(!isLikeActive)
     setLikeCount(prev => isLikeActive ? prev - 1 : prev + 1)
-    onLike(postId)
+    onLike && onLike(postId)
   }
 
   return (
@@ -49,14 +52,16 @@ const PostCard = ({ currentUser, onDelete, onLike, post, isLiked }: PostCardProp
             <View className='flex-row items-center'>
               <Text className='font-bold text-gray-900 mr-1'>
                 {post.user.firstName} {post.user.lastName}
-
-                <Text className='text-gray-500 ml-1'>
-                  @{post.user.username} . {formatDate(post.createdAt)}
                 </Text>
-              </Text>
+
+                
+                  <Text className='text-gray-500 font-normal'>
+                    @{post.user.username} . {formatPost === "full" && formatDate(post.createdAt)}
+                  </Text>
+                
             </View>
 
-              { isOwnPost && (
+              { isOwnPost && onDelete && (
                 <TouchableOpacity onPress={handleDelete}>
                   <Feather name="trash" size={20} color="#657786" />
                 </TouchableOpacity>
@@ -75,29 +80,33 @@ const PostCard = ({ currentUser, onDelete, onLike, post, isLiked }: PostCardProp
               resizeMode='cover'
             />
           )}
-
-          <View className='flex-row justify-between xxsm:max-w-full lg:max-w-sm mt-4'>
-              <FeatherBtn featherName="message-circle" size={18} color="#657786" onPress={() => {}} inText={formatNumber(post.comments?.length || 0)} />
+            {/* // options */}
+          { formatPost === "full" ? <View className='flex-row justify-between xxsm:max-w-full lg:max-w-sm mt-4'>
+              <FeatherBtn featherName="message-circle" size={18} color="#657786" onPress={() => onComment && onComment(post)} inText={formatNumber(post.comments?.length || 0)} />
               <FeatherBtn featherName="repeat" size={18} color="#657786" onPress={() => {}} inText="0" />
 
-            <TouchableOpacity className="flex-row items-center" onPress={() => handleLike(post._id)}>
-              {isLikeActive || isLiked ? (
-                <AntDesign name="heart" size={18} color="#E0245E" />
-              ) : (
-                <Feather name="heart" size={18} color="#657786" />
-              )}
+              {/* on Like  */}
+              <TouchableOpacity className="flex-row items-center" onPress={() => handleLike(post._id)}>
+                {ifLiked? (
+                  <AntDesign name="heart" size={18} color="#E0245E" />
+                ) : (
+                  <Feather name="heart" size={18} color="#657786" />
+                )}
 
-              <Text className={`text-sm ml-2 ${isLikeActive || isLiked ? "text-red-500" : "text-gray-500"}`}>
-                {formatNumber(likeCount)}
-              </Text>
-            </TouchableOpacity> 
-              
+                <Text className={`text-sm ml-2 ${ifLiked ? "text-red-500" : "text-gray-500"}`}>
+                  {formatNumber(likeCount)}
+                </Text>
+              </TouchableOpacity> 
               
               <FeatherBtn featherName="share" size={18} color="#657786" onPress={() => {}} inText="0" />
           </View>
-        </View>
-        </View>
 
+          : null
+          // short format would only show the content and image, without the options
+
+          }
+        </View>
+      </View>
     </View>
   );
 };

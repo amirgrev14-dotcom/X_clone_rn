@@ -18,8 +18,6 @@ export const createApiClient = (getToken: any): AxiosInstance => {
       template: "mobile",
     });
 
-    console.log("token", token);
-
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

@@ -20,33 +20,23 @@ interface SelectedPops {
 
 const FeatherBtn = (props: SelectedPops) => {
   
-  const { onPress, featherName="home", antName="home", isChecked, size=20, variant="default", activeColor="#1DA1F2", color="black", disabled=false, inText, changeVariantOnPress=false } = props
+  const { onPress, featherName="home", size=18, activeColor, color="#6b7280", disabled=false, inText } = props
   const [currentColor, setCurrentColor] = useState(color)
-  const [changeVariant, setChangeVariant] = useState(variant)
-  const [activeBtn, setActiveBtn] = useState(false)
-
   
   function handleBtn() {
-    setActiveBtn(!activeBtn)
+    if(activeColor) {
+      setCurrentColor(activeColor.toString().toLowerCase())
+    }
+
     onPress && onPress() // optional
 
-    if(changeVariantOnPress && isChecked) {
-      setChangeVariant(activeBtn ? "antDesign" : "default")
-      setCurrentColor(activeColor)
-    } 
-
-    
   }
 
   return (
     <TouchableOpacity onPress={handleBtn} disabled={disabled} className='flex-row'>
-      { isChecked ?
-            <>
-              {!isChecked && <Feather name={featherName} size={size} color={currentColor} />}
-              {isChecked && <AntDesign name={antName} size={size} color={currentColor} />}
-            </>
-        : <Feather name={featherName} size={size} color={activeBtn ? activeColor : color} />}
-      <Text style={{color: activeBtn ? activeColor : color}} className='text-gray-500 text-wrapt-sm ml-2' >
+      <Feather name={featherName} size={size} color={currentColor} />
+
+      <Text style={{color: currentColor}} className='text-wrapt-sm ml-2' >
         { inText }
       </Text>
     </TouchableOpacity>

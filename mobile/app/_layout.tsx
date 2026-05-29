@@ -5,8 +5,8 @@ import { ClerkProvider, useAuth } from '@clerk/expo'
 import { tokenCache } from '@clerk/expo/token-cache'
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Platform, KeyboardAvoidingView } from "react-native"
 
 const queryClient = new QueryClient()
 
@@ -47,7 +47,9 @@ const RootLayout = () => {
       <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
         <QueryClientProvider client={queryClient}>
         <SafeAreaView edges={["top"]} className="flex-1">
-          <RootStack />
+          <KeyboardAvoidingView style={{flex: 1}}  behavior={Platform.OS === "ios" ? "padding" : "height"}>
+            <RootStack />
+          </KeyboardAvoidingView>
         </SafeAreaView>
         <StatusBar style="auto" />
         </QueryClientProvider>
