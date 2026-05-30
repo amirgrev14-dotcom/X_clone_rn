@@ -4,6 +4,8 @@ import { Post } from "@/types";
 import { View, Text, ActivityIndicator, TouchableOpacity } from "react-native";
 import PostCard from "./PostCard";
 import { useState } from "react";
+import CommentsModal from "./CommentsModal";
+import CommentCard from "./CommentCard";
 // import CommentsModal from "./CommentsModal";
 
 const PostsList = ({ username }: { username?: string }) => {
@@ -13,6 +15,8 @@ const PostsList = ({ username }: { username?: string }) => {
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
   const selectedPost = selectedPostId ? posts.find((p: Post) => p._id === selectedPostId) : null;
+
+  // Workaround for possible typing/exports mismatch of CommentCard
 
   if (isLoading) {
     return (
@@ -50,13 +54,27 @@ const PostsList = ({ username }: { username?: string }) => {
           post={post}
           onLike={toggleLike}
           onDelete={deletePost}
-          // onComment={(post: Post) => setSelectedPostId(post._id)}
+          onComment={(post: Post) => setSelectedPostId(post._id)}
           currentUser={currentUser}
           isLiked={checkIsLiked(post.likes, currentUser)}
         />
       ))}
 
-      {/* <CommentsModal selectedPost={selectedPost} onClose={() => setSelectedPostId(null)} /> */}
+      <CommentsModal selectedPost={selectedPost}
+        originalPostItem={() => (
+          <PostCard
+            formatPost="short"
+            post={selectedPost}
+            currentUser={currentUser}
+          />
+        )}
+
+         commentsPostItem={(comment: any) => (
+          <CommentCard comment={comment} />
+        )
+      }
+        onClose={() => setSelectedPostId(null)}
+      />
     </>
   );
 };
