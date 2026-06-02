@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator, RefreshControl } from 'react-native'
 import React from 'react'
 import { useNotifications } from '@/hooks/useNotification'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -11,7 +11,7 @@ import FeatherBtn from '@/components/FeatherBtn'
     const { notifications, isLoading, error, refetch, isRefetching } = useNotifications()
     const insets = useSafeAreaInsets()
     
-    const chooseContentItem = (notification: any,) => {
+    const chooseContentItem = (notifications: any)  => {
 
       if(error) {
         return (
@@ -35,21 +35,19 @@ import FeatherBtn from '@/components/FeatherBtn'
         )
       }
 
-      if(notification.length === 0) {
+      if(notifications.length === 0) {
         return (
           <NoNotificationsFound />
         )
       }
 
-      notification.map((notification: Notification) => {
-        return (
+      return notifications.map((notification: Notification) => (
           <NotificationCard 
             onDelete={() => {}}
             key={notification._id}
             notification={notification}
           />
-        )
-      })
+        ))
 
     }
 
@@ -67,6 +65,9 @@ import FeatherBtn from '@/components/FeatherBtn'
         {/* Content */}
         <ScrollView
           className='flex-1'
+          refreshControl={
+            <RefreshControl refreshing={isRefetching} onRefresh={refetch} tintColor="#1DA1F2" />
+          }
           contentContainerStyle={{ paddingBottom: 100 + insets.bottom }}
           showsHorizontalScrollIndicator={false}
         >

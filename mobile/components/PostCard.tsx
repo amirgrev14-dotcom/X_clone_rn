@@ -9,18 +9,19 @@ interface PostCardProps {
   post: Post;
   onLike?: (postId: string) => void;
   onDelete?: (postId: string) => void;
-  onComment?: (post: Post) => void;
+  onMessage?: () => void;
   isLiked?: boolean;
   currentUser: User;
   formatPost?: "short" | "full";
 }
 
-const PostCard = ({ currentUser, onDelete, onLike, post, isLiked, onComment, formatPost="full" }: PostCardProps) => {
+const PostCard = ({ currentUser, onDelete, onLike, post, isLiked, onMessage, formatPost="full" }: PostCardProps) => {
 
   const [isLikeActive, setIsLikeActive] = useState(false)
-  const [likeCount, setLikeCount] = useState(post.likes?.length || 0)
+  const [likeCount, setLikeCount] = useState(post.likes.length)
   const ifLiked = isLiked || isLikeActive
 
+  console.log("Current User:", currentUser)
   const isOwnPost = post.user._id === currentUser._id
 
   const handleDelete = () => {
@@ -76,13 +77,13 @@ const PostCard = ({ currentUser, onDelete, onLike, post, isLiked, onComment, for
           {post.image &&  (
             <Image 
               source={{ uri: post.image}}
-              className='w-full h-48 rounded-2xl mb-3'
+              className='w-full aspect-square rounded-2xl mb-3'
               resizeMode='cover'
             />
           )}
             {/* // options */}
           { formatPost === "full" ? <View className='flex-row justify-between xxsm:max-w-full lg:max-w-sm mt-4'>
-              <FeatherBtn featherName="message-circle" size={18} color="#657786" onPress={() => onComment && onComment(post)} inText={formatNumber(post.comments?.length || 0)} />
+              <FeatherBtn featherName="message-circle" size={18} color="#657786" onPress={() => onMessage && onMessage()} inText={formatNumber(post.comments?.length || 0)} />
               <FeatherBtn featherName="repeat" size={18} color="#657786" onPress={() => {}} inText="0" />
 
               {/* on Like  */}

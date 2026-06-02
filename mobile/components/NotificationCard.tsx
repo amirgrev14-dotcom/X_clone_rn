@@ -11,6 +11,10 @@ interface NotificationCardProps {
 
 
 const NotificationCard = ({ notification, onDelete }: NotificationCardProps) => {
+
+  console.log("Rendering NotificationCard for notification:", notification )
+
+
   const getNotificationText = () => {
     const name = `${notification.from.firstName} ${notification.from.lastName}`;
     switch (notification.type) {
@@ -51,8 +55,10 @@ const NotificationCard = ({ notification, onDelete }: NotificationCardProps) => 
   };
 
   return (
+    
     <View className="border-b border-gray-100 bg-white">
       <View className="flex-row p-4">
+        
         <View className="relative mr-3">
           <Image
             source={{ uri: notification.from.profilePicture }}

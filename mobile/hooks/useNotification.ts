@@ -14,9 +14,11 @@ export const useNotifications = () => {
     refetch
   } = useQuery({
     queryKey: ["notifications"],
-    queryFn: () => api.get("notifications"),
+    queryFn: () => api.get("/notifications"),
     select: (res) => res.data.notifications
   })
+
+  console.log("notificationsData", notificationsData)
 
   const deleteNotificationMutation = useMutation({
     mutationFn: (notificationId: string) => api.delete(`/notifications/${notificationId}`),

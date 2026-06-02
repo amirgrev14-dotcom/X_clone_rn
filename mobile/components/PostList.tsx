@@ -10,6 +10,8 @@ import ReplyCard from "./ReplyCard";
 
 const PostsList = ({ username }: { username?: string }) => {
   const { currentUser } = useCurrentUser();
+  console.log("Current User in PostsList: @#@#", currentUser);
+  
   const { posts, isLoading, error, refetch, toggleLike, deletePost, checkIsLiked } = usePosts(username);
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const [isOpenReplies, setIsOpenReplies] = useState(false)

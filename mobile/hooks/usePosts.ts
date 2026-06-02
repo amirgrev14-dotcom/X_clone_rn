@@ -17,13 +17,15 @@ export const usePosts = (username?: string) => {
   });
 
   const likePostMutation = useMutation({
-    mutationFn: (postId: string) => postApi.likePost(api, postId),
+    mutationFn: (postId: string) => {
+      return postApi.likePost(api, postId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       if (username) {
         queryClient.invalidateQueries({ queryKey: ["userPosts", username] });
       }
-    },
+    }, 
   });
 
   const deletePostMutation = useMutation({
@@ -37,6 +39,7 @@ export const usePosts = (username?: string) => {
   });
 
   const checkIsLiked = (postLikes: string[], currentUser: any) => {
+
     const isLiked = currentUser && postLikes.includes(currentUser._id);
     return isLiked;
   };
