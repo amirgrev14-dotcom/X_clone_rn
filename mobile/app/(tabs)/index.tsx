@@ -1,13 +1,25 @@
-import { View, Text, ScrollView } from 'react-native'
-import React from 'react'
+import { View, Text, ScrollView, RefreshControl } from 'react-native'
+import React, { useState } from 'react'
 import SignOutBtn from '@/components/SignOutBtn'
 import PostComposer from '@/components/PostComposer'
 import { useUserSync } from '@/hooks/useUserSync'
 import { Ionicons } from '@expo/vector-icons'
 import PostList from '@/components/PostList'
+import { usePosts } from '@/hooks/usePosts'
 
 const HomeScreen = () => {
   useUserSync()
+
+const {refetch: refetchPosts} = usePosts()
+const [isRefreshing, setIsRefreshing] = useState(false) 
+
+const hundlePullRefresh = async () => {
+  setIsRefreshing(true)
+  
+  await refetchPosts()
+  setIsRefreshing(false)
+}
+
 
   return (
     <View className='flex-1 bg-white'>
@@ -23,6 +35,9 @@ const HomeScreen = () => {
         showsVerticalScrollIndicator={false}
         className='flex-1'
         contentContainerStyle={{paddingBottom: 80}}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={hundlePullRefresh} />
+        }
         >
           <PostComposer />
           <PostList />
