@@ -51,7 +51,7 @@ const RootLayout = () => {
             <RootStack />
           </KeyboardAvoidingView>
         </SafeAreaView>
-        <StatusBar style="auto" />
+        <StatusBar style="dark" />
         </QueryClientProvider>
       </ClerkProvider>
     )

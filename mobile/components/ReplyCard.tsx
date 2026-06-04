@@ -2,13 +2,12 @@ import { View, Text, Image } from 'react-native'
 import { Comment } from '@/types'
 import React from 'react'
 
-interface CommentCardProps {
+interface ReplyCardProps {
   comment: Comment
 }
 
-const CommentCard = ({ comment }: CommentCardProps) => {
+const ReplyCard = ({ comment }: ReplyCardProps) => {
 
-  console.log("comment in card", comment)
   return (
     <View>
       <View className="flex-row">
@@ -25,11 +24,11 @@ const CommentCard = ({ comment }: CommentCardProps) => {
             <Text className="text-gray-500 text-sm ml-1">@{comment.user.username}</Text>
           </View>
 
-          <Text className="text-gray-900text-base leading-5 mb-2">{comment.content}</Text>
+          <Text className="text-gray-900 text-base leading-5 mb-2">{comment.content}</Text>
         </View>
       </View>
     </View>
   )
 }
 
-export default CommentCard
+export default ReplyCard

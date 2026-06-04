@@ -5,18 +5,26 @@ import { View, Text, ActivityIndicator, TouchableOpacity } from "react-native";
 import PostCard from "./PostCard";
 import { useState } from "react";
 import CommentsModal from "./CommentsModal";
-import CommentCard from "./CommentCard";
+import ReplyCard from "./ReplyCard";
 // import CommentsModal from "./CommentsModal";
 
 const PostsList = ({ username }: { username?: string }) => {
   const { currentUser } = useCurrentUser();
-  const { posts, isLoading, error, refetch, toggleLike, deletePost, checkIsLiked } =
-    usePosts(username);
+  console.log("Current User in PostsList: @#@#", currentUser);
+  
+  const { posts, isLoading, error, refetch, toggleLike, deletePost, checkIsLiked } = usePosts(username);
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
+  const [isOpenReplies, setIsOpenReplies] = useState(false)
 
   const selectedPost = selectedPostId ? posts.find((p: Post) => p._id === selectedPostId) : null;
 
   // Workaround for possible typing/exports mismatch of CommentCard
+
+
+  const handleMessage = (post: Post) => {
+    setSelectedPostId(post._id)
+    setIsOpenReplies(true)
+  }
 
   if (isLoading) {
     return (
@@ -54,27 +62,27 @@ const PostsList = ({ username }: { username?: string }) => {
           post={post}
           onLike={toggleLike}
           onDelete={deletePost}
-          onComment={(post: Post) => setSelectedPostId(post._id)}
+          onMessage={() => handleMessage(post)}
           currentUser={currentUser}
           isLiked={checkIsLiked(post.likes, currentUser)}
         />
       ))}
 
-      <CommentsModal selectedPost={selectedPost}
-        originalPostItem={() => (
-          <PostCard
-            formatPost="short"
-            post={selectedPost}
-            currentUser={currentUser}
-          />
-        )}
-
-         commentsPostItem={(comment: any) => (
-          <CommentCard comment={comment} />
-        )
+      { isOpenReplies && <CommentsModal selectedPost={selectedPost}
+          originalPostItem={() => (
+            <PostCard
+              formatPost="short"
+              post={selectedPost}
+              currentUser={currentUser}
+            />
+          )}
+          
+          onClose={() => setIsOpenReplies(false)}
+          commentsPostItem={(comment: any) => (
+            <ReplyCard comment={comment} />
+          )
       }
-        onClose={() => setSelectedPostId(null)}
-      />
+      />}
     </>
   );
 };

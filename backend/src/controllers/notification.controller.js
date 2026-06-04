@@ -5,16 +5,18 @@ import User from "../models/user.model.js";
 
 export const getNotifications = asyncHandler(async (req, res) => {
   const { userId } = getAuth(req);
-
+  
   const user = await User.findOne({ clerkId: userId });
   if (!user) return res.status(404).json({ error: "User not found" });
 
+  console.log("Fetching notifications for user:", user._id);
   const notifications = await Notification.find({ to: user._id })
     .sort({ createdAt: -1 })
     .populate("from", "username firstName lastName profilePicture")
     .populate("post", "content image")
     .populate("comment", "content");
 
+    console.log("Notifications found:", notifications.length);
   res.status(200).json({ notifications });
 });
 
