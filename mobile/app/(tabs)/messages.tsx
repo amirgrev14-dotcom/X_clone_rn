@@ -1,13 +1,12 @@
-import { View, Text, Alert, TouchableOpacity, TextInput, ScrollView, Image, Modal } from 'react-native'
+import { View, Text, Alert, TouchableOpacity, TextInput, ScrollView, Image, Modal, ActivityIndicator } from 'react-native'
 import { CONVERSATIONS, ConversationType } from '@/data/conversations'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Feather } from '@expo/vector-icons'
 import SearchInput from '@/components/searchInput'
 
 const MessagesScreen = () => {
   const insets  = useSafeAreaInsets()
-  const [searchText, setSearchText] = React.useState("")
   const [conversationsList, setConversationsList] = React.useState(CONVERSATIONS)
   const [selectedConversation, setSelectedConversation] = React.useState<ConversationType | null>(null)
   const [isChatOpen, setIschatOpen] = useState(false);
@@ -25,6 +24,48 @@ const MessagesScreen = () => {
       ]
     )
   }
+
+  // search
+  const [searchText, setSearchText] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [allConversations] = useState(CONVERSATIONS)
+
+  // debounce timer
+  const searchTimer = React.useRef<NodeJS.Timeout | null>(null)
+
+  function performSearch(search: string) {
+    setLoading(true)
+    const filteredConversations = allConversations.filter((con) =>
+      con.user.name.toLowerCase().includes(search.toLowerCase()) ||
+      con.user.username.toLowerCase().includes(search.toLowerCase())
+    )
+    
+    setConversationsList(filteredConversations)
+
+    // simulate delay for loading indicator
+    setTimeout(() => setLoading(false), 300)
+  }
+
+  useEffect(() => {
+    // clear previous timer
+    if (searchTimer.current) clearTimeout(searchTimer.current)
+
+    // if search is empty restore full list
+    if (!searchText.trim()) {
+      setConversationsList(allConversations)
+      setLoading(false)
+      return
+    }
+
+    // debounce search by 250ms
+    searchTimer.current = setTimeout(() => performSearch(searchText), 250) as any
+
+    return () => {
+      if (searchTimer.current) clearTimeout(searchTimer.current)
+    }
+  }, [searchText, allConversations])
+  
+
 
   const openConversation = (conversation: ConversationType) => {
     setSelectedConversation(conversation)
@@ -90,8 +131,11 @@ const MessagesScreen = () => {
         </TouchableOpacity>
       </View>
 
+
       {/* Search Input */}
       <SearchInput value={searchText} onChangeText={setSearchText} textPlaceholder="Search for people and groups" placeholderTextColor="#657786" iconName="search" iconColor="#657786" />
+
+
 
 
       {/* Conversations */}
@@ -100,6 +144,12 @@ const MessagesScreen = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: 100+insets.bottom}}
       >
+  {loading ? (
+        <View className='text-center items-center justify-center flex-1 py-10'>
+          <ActivityIndicator size="large" color="#1DA1F2" />
+        </View>
+      ) : (  
+       <>
         {conversationsList.map((conversation) => (
         
           <View key={conversation.id}>
@@ -107,6 +157,9 @@ const MessagesScreen = () => {
           </View>
         
         ))}
+        </>
+        )}
+        
       </ScrollView>
 
 
@@ -117,6 +170,7 @@ const MessagesScreen = () => {
         </Text>
       </View>
 
+      {/* Chat Modal */}
       <Modal visible={isChatOpen} animationType='slide' presentationStyle='pageSheet'>
           {selectedConversation && (
             <SafeAreaView className="flex-1">

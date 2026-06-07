@@ -17,7 +17,7 @@ interface PostCardProps {
 
 const PostCard = ({ currentUser, onDelete, onLike, post, isLiked, onMessage, formatPost="full" }: PostCardProps) => {
 
-  const [isLikeActive, setIsLikeActive] = useState(false)
+  const [isLikeActive, setIsLikeActive] = useState(isLiked)
   const [likeCount, setLikeCount] = useState(post.likes.length)
   const ifLiked = isLiked || isLikeActive
 
@@ -77,7 +77,7 @@ const PostCard = ({ currentUser, onDelete, onLike, post, isLiked, onMessage, for
           {post.image &&  (
             <Image 
               source={{ uri: post.image}}
-              className='w-full w-1/2 aspect-square rounded-2xl mb-3'
+              className='w-full  rounded-2xl mb-3'
               resizeMode='cover'
             />
           )}
@@ -88,13 +88,13 @@ const PostCard = ({ currentUser, onDelete, onLike, post, isLiked, onMessage, for
 
               {/* on Like  */}
               <TouchableOpacity className="flex-row items-center" onPress={() => handleLike(post._id)}>
-                {ifLiked? (
+                {isLikeActive && likeCount !== 0 ? (
                   <AntDesign name="heart" size={18} color="#E0245E" />
                 ) : (
                   <Feather name="heart" size={18} color="#657786" />
                 )}
 
-                <Text className={`text-sm ml-2 ${ifLiked ? "text-red-500" : "text-gray-500"}`}>
+                <Text className={`text-sm ml-2 ${isLikeActive ? "text-red-500" : "text-gray-500"}`}>
                   {formatNumber(likeCount)}
                 </Text>
               </TouchableOpacity> 

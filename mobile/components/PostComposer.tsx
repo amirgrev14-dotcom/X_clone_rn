@@ -7,6 +7,8 @@ const PostComposer = () => {
   const {
     content,
     setContent,
+    cheshTag,
+    setCheshTag,
     selectedImage,
     isCreating,
     pickImageFromGallery,
@@ -16,6 +18,8 @@ const PostComposer = () => {
   } = useCreatePost();
 
   const { user } = useUser();
+
+  
 
   return (
     <View className="border-b border-gray-100 p-4 bg-white">
@@ -39,7 +43,7 @@ const PostComposer = () => {
           <View className="relative">
             <Image
               source={{ uri: selectedImage }}
-              className="w-full aspect-square rounded-2xl"
+              className="w-full rounded-2xl"
               resizeMode="cover"
             />
             <TouchableOpacity
@@ -71,6 +75,18 @@ const PostComposer = () => {
             </Text>
           )}
 
+            <TextInput 
+              className="text-gray-900 text-xs border border-gray-300 rounded-full mx-2 content-center text-center"
+              placeholder="#chesh tag"
+              placeholderTextColor="#657786"
+              multiline
+              value={cheshTag}
+              onChangeText={setCheshTag}
+              maxLength={20}
+              />
+
+
+
           <TouchableOpacity
             className={`px-6 py-2 rounded-full ${
               content.trim() || selectedImage ? "bg-blue-500" : "bg-gray-300"
@@ -81,6 +97,7 @@ const PostComposer = () => {
             {isCreating ? (
               <ActivityIndicator size="small" color="white" />
             ) : (
+             <>
               <Text
                 className={`font-semibold ${
                   content.trim() || selectedImage ? "text-white" : "text-gray-500"
@@ -88,6 +105,8 @@ const PostComposer = () => {
               >
                 Post
               </Text>
+             </>
+             
             )}
           </TouchableOpacity>
         </View>
