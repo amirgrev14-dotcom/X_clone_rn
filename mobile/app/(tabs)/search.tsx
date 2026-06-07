@@ -1,5 +1,5 @@
-import { View, Text, TextInput, ScrollView, FlatList, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, TextInput, ScrollView, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { Feather } from '@expo/vector-icons'
 import SearchInput from '@/components/searchInput'
 
@@ -11,7 +11,7 @@ const SearchScreen = () => {
     {topic: "Web Development", hashtags: "#Angular", tweets: "10K"},
     {topic: "AI", hashtags: "#AI", tweets: "140K"},
     {topic: "Flutter", hashtags: "#Flutter", tweets: "120K"},
-        {topic: "mobile Technology", hashtags: "#ReactNative", tweets: "106K"},
+    {topic: "mobile Technology", hashtags: "#ReactNative", tweets: "106K"},
     {topic: "Web Development", hashtags: "#TypeScript", tweets: "90K"},
     {topic: "Web Development", hashtags: "#Angular", tweets: "10K"},
     {topic: "AI", hashtags: "#AI", tweets: "140K"},
@@ -26,12 +26,30 @@ const SearchScreen = () => {
     {topic: "Flutter", hashtags: "#Flutter", tweets: "120K"},
   ]
 
-
   interface SelectTrending {
     topic: string;
     tweets: string;
     hashtags: string;
   }
+
+  const [textSearch, setTextSearch] = useState("")
+  const [trending, setTrending] = useState<SelectTrending[]>([])
+  const [loading, setLoading] = useState(false)
+
+
+  function fetchTrending(text = textSearch) {
+    setLoading(true)
+    const filteredTopics = TRENDING_TOPICS.filter(item => item.hashtags.toLowerCase().includes(text.toLowerCase()) || item.topic.toLowerCase().includes(text.toLowerCase()))
+
+    setTimeout(() => {
+      setTrending(filteredTopics);
+      setLoading(false)
+    }, 1000);
+  }
+
+  useEffect(() => {
+    fetchTrending();
+  }, [textSearch])
 
 
   const trendingItem = (item: SelectTrending) => {
@@ -51,19 +69,31 @@ const SearchScreen = () => {
     <View className='bg-white flex-1'>
 
       {/* Header */}
-      <SearchInput value="" textPlaceholder="Search Twitter" placeholderTextColor="#657786" iconName="search" iconColor="#657786" />
+      <SearchInput  onChangeText={setTextSearch} value={textSearch} textPlaceholder="Search Twitter" placeholderTextColor="#657786" iconName="search" iconColor="#657786" />
       {/* Search List */}
-      <ScrollView className="flex-1">
+      
+
+  
+
+<ScrollView className="flex-1">
         <View className='p-4'>
           <Text className="text-xl font-bold text-gray-900 mb-4">Treding for you</Text>
 
-          {TRENDING_TOPICS.map((item, index) => (
+
+    {loading ? (
+        <View className='text-center items-center justify-center flex-1 py-10'>
+          <ActivityIndicator size="large" color="#1DA1F2" />
+        </View>
+      ) : (
+          trending.map((item, index) => (
             <View key={index}>
               {trendingItem(item)}
             </View>
-          ))}
+          ))
+        )}
         </View>
       </ScrollView>
+    
         
     </View>
   )

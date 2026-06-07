@@ -31,7 +31,6 @@ export const useApiClient = (): AxiosInstance => {
   const { getToken } = useAuth();
   return createApiClient(getToken);
 };
-
 export const userApi = {
   syncUser: (api: AxiosInstance) => api.post("/users/sync"),
   getCurrentUser: (api: AxiosInstance) => api.get("/users/me"),

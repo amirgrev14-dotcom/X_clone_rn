@@ -6,6 +6,7 @@ import { useApiClient } from "../utils/api";
 
 export const useCreatePost = () => {
   const [content, setContent] = useState("");
+  const [cheshTag, setCheshTag] = useState("")
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const api = useApiClient();
   const queryClient = useQueryClient();
@@ -37,6 +38,7 @@ export const useCreatePost = () => {
       return api.post("/posts", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+
     },
     onSuccess: () => {
       setContent("");
@@ -48,6 +50,17 @@ export const useCreatePost = () => {
       Alert.alert("Error", "Failed to create post. Please try again.");
     },
   });
+
+  // const createCheshTag = useMutation({
+  //   mutationFn: api.post(""),
+  //   onSuccess: () => {
+  //     setCheshTag("")
+  //     queryClient.invalidateQueries({ queryKey: ["trending"] })
+  //   },
+  //   onError: () => {
+  //     Alert.alert("Error", "Failed to create ChehTag. Please try again.");
+  //   }
+  // })
 
   const handleImagePicker = async (useCamera: boolean = false) => {
     const permissionResult = useCamera
@@ -94,6 +107,8 @@ export const useCreatePost = () => {
   return {
     content,
     setContent,
+    cheshTag,
+    setCheshTag,
     selectedImage,
     isCreating: createPostMutation.isPending,
     pickImageFromGallery: () => handleImagePicker(false),

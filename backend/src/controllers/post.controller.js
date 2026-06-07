@@ -136,7 +136,6 @@ export const likePost = asyncHandler(async (req, res) => {
     // create notification if not liking own post
     console.log(post.user.toString() !== user._id.toString())
     if (post.user.toString() !== user._id.toString()) {
-      console.log("Post owner ID:", post.user.toString(), "Liker ID:", user._id.toString())
     
     const notification = await Notification.create({
       from: user._id,

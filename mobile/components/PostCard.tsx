@@ -77,7 +77,7 @@ const PostCard = ({ currentUser, onDelete, onLike, post, isLiked, onMessage, for
           {post.image &&  (
             <Image 
               source={{ uri: post.image}}
-              className='w-full aspect-square rounded-2xl mb-3'
+              className='w-full w-1/2 aspect-square rounded-2xl mb-3'
               resizeMode='cover'
             />
           )}

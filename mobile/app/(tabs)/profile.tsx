@@ -1,6 +1,7 @@
 import { View, Text, ActivityIndicator, ScrollView, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
+import EditProfileModal from '@/components/EditProfileModal'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import SignOutBtn from '@/components/SignOutBtn'
 import Feather from '@expo/vector-icons/build/Feather'
@@ -9,10 +10,27 @@ import { Alert } from 'react-native'
 import PostsList from '@/components/PostList'
 import { format } from 'date-fns'
 import { usePosts } from '@/hooks/usePosts'
+import { useProfile } from '@/hooks/useProfile'
 
 const ProfileScreen = () => {
   const {  currentUser,  isLoading } = useCurrentUser()
-  const { posts: userPosts } = usePosts(currentUser?.username)
+  const {
+        posts: userPosts,
+        refetch: refetchPosts,
+        isLoading: isRefetching
+      } = usePosts(currentUser?.username)
+
+  const {
+    isEditModalVisible,
+    openEditModal,
+    closeEditModal,
+    formData,
+    saveProfile,
+    updateFormField,
+    isUpdating,
+    refetch: refetchProfile,
+  } = useProfile();
+
 
   const insets = useSafeAreaInsets()
 
@@ -67,7 +85,7 @@ const ProfileScreen = () => {
               <View className="flex-row justify-between items-end -mt-16 mb-4">
                 <Image source={{ uri: currentUser.profilePicture }} className="w-32 h-32 rounded-full border-4 border-white"  />
 
-                <TouchableOpacity className="border border-gray-300 px-6 py-2 rounded-full">
+                <TouchableOpacity onPress={openEditModal} className="border border-gray-300 px-6 py-2 rounded-full">
                   <Text className="text-gray-900 font-semibold">Edit Profile</Text>
                 </TouchableOpacity>
               </View>
@@ -76,14 +94,14 @@ const ProfileScreen = () => {
               <View className="mb-4">
                 <View className="flex-row items-center mb-1">
                     <Text className="text-xl font-bold text-gray-900 mr-1"> { currentUser.firstName } {currentUser.lastName}</Text>
-                    <FeatherBtn featherName="check-circle" size={20} color="#1DA1F2" onPress={() => handleCheckIcon()} />
+                    <FeatherBtn featherName="check-circle" size={20} color="#657786" onPress={() => handleCheckIcon()} />
                 </View>
 
                 <Text className="text-gray-500 mb-2">@{currentUser.username}</Text>
                 <Text className="text-gray-900 mb-3">{currentUser.bio}</Text>
               
                 <View className="flex-row items-center mb-2">
-                    <FeatherBtn featherName="map-pin" size={20} color="#1DA1F2" onPress={handleLocationPress} />
+                    <FeatherBtn featherName="map-pin" size={20} color="#657786" onPress={handleLocationPress} />
                     <Text className="text-gray-500 ml-2">{currentUser.location}</Text>
                 </View>
 
@@ -94,20 +112,22 @@ const ProfileScreen = () => {
 
                   {/*  Follow stats */}
 
-              <TouchableOpacity className="mr-6">
-                <Text className="text-gray-900">
-                    <Text className="font-bold">{currentUser.following?.length || 0}</Text>
-                    <Text className="text-gray-500"> Following</Text>
-                </Text>
+              <View className="flex-row items-center mb-4">
+                <TouchableOpacity className="mr-6">
+                  <Text className="text-gray-900">
+                      <Text className="font-bold">{currentUser.following?.length || 0}</Text>
+                      <Text className="text-gray-500"> Following</Text>
+                  </Text>
               </TouchableOpacity>
 
               {/*  count Followers and Following */}
-              <TouchableOpacity className="mr-6">
-                  <Text className="text-gray-900">
-                    <Text className="font-bold">{currentUser.followers?.length || 0}</Text>
-                    <Text className="text-gray-500"> Followers</Text>
-                  </Text>
-              </TouchableOpacity>
+                <TouchableOpacity className="mr-6">
+                    <Text className="text-gray-900">
+                      <Text className="font-bold">{currentUser.followers?.length || 0}</Text>
+                      <Text className="text-gray-500"> Followers</Text>
+                    </Text>
+                </TouchableOpacity>
+              </View>
 
               </View>
             </View>
@@ -115,6 +135,17 @@ const ProfileScreen = () => {
             <PostsList username={currentUser.username} />  
 
           </View>
+
+
+      <EditProfileModal
+        isVisible={isEditModalVisible}
+        onClose={closeEditModal}
+        formData={formData}
+        saveProfile={saveProfile}
+        updateFormField={updateFormField}
+        isUpdating={isUpdating}
+      />
+
         </ScrollView>
     </View>
   )

@@ -65,9 +65,6 @@ const NotificationCard = ({ notification, onDelete }: NotificationCardProps) => 
             className="size-12 rounded-full"
           />
 
-          <View className="abolute -bottom-1 -right-1 size-6 bg-white items-center justify-center">
-            {getNotificationIcon()}
-          </View>
         </View>
 
         <View className="flex-1">
@@ -78,8 +75,16 @@ const NotificationCard = ({ notification, onDelete }: NotificationCardProps) => 
                   {notification.from.firstName} {notification.from.lastName}
                 </Text>
                 <Text className="text-gray-500"> @{notification.from.username}</Text>
+               {/* Notification Icon exp.. like  */}
+                <View className="abolute -bottom-1 -right-1 px-4 size-6 bg-white items-center justify-center">
+                    {getNotificationIcon()} 
+                </View>
+          
               </Text>
-              <Text className="text-gray-700 text-sm mb-2">{getNotificationText()}</Text>
+              {/* post text description */}
+              <Text className="text-gray-700 text-sm mb-2">
+                {getNotificationText()}
+                </Text>
             </View>
 
             <FeatherBtn featherName="trash" size={16} color="#E0245E" onPress={handleDelete} />
@@ -101,7 +106,7 @@ const NotificationCard = ({ notification, onDelete }: NotificationCardProps) => 
           )}
 
           {notification.comment && (
-            <View className="bg-blue-50 rounded-lg p-3 mb-2">
+            <View className="bg-blue-50 rounded-lg px-3 mb-2">
               <Text className="text-gray-600 text-xs mb-1">Comment:</Text>
               <Text className="text-gray-700 text-sm" numberOfLines={2}>
                 &ldquo;{notification.comment.content}&rdquo;
@@ -109,7 +114,7 @@ const NotificationCard = ({ notification, onDelete }: NotificationCardProps) => 
             </View>
           )}
 
-          <Text className="text-gray-400 text-xs">{formatDate(notification.createdAt)}</Text>
+          <Text className="text-gray-400 text-sm text-end px-3 ">{formatDate(notification.createdAt)}</Text>
         </View>
       </View>
     </View>
